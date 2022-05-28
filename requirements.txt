@@ -2,3 +2,5 @@ pynput
 rich
 requests
 argparse
+pyautogui
+requests

